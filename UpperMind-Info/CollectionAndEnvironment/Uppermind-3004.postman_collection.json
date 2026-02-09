@@ -1,0 +1,2688 @@
+{
+	"info": {
+		"_postman_id": "d6f97328-2619-42d9-a1b1-1e50b9e86e84",
+		"name": "Uppermind-3004",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43070482"
+	},
+	"item": [
+		{
+			"name": "Chat",
+			"item": [
+				{
+					"name": "Chat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"content\": \"Kindly list our last 3 messages.\",\r\n   \"chat_history_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reason",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"content\": \"What was my first message to you?\",\r\n   \"chat_history_id\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Non interactive Chat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"content\": \"Hello, how are you?\",\r\n   \"agent_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat/noninteractive",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat",
+								"noninteractive"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat Streaming",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"content\": \"Can you tell me a story?\",\r\n   \"chat_history_id\": 1,\r\n   \"include_filenames\": true,\r\n   \"streaming\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Users",
+					"item": [
+						{
+							"name": "Image",
+							"item": [
+								{
+									"name": "Upload Self Image",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "file",
+													"type": "file",
+													"src": "/C:/Users/arda1/OneDrive/Masaüstü/tester.png"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/users/image",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"users",
+												"image"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Self Image",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/users/image",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"users",
+												"image"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Self Image",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/users/image",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"users",
+												"image"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get All Scopes",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/get_all_scopes",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"get_all_scopes"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"ayilmazlar\",\r\n    \"password\": \"test\",\r\n    \"foreign_id\": \"1616\",\r\n    \"email\": \"ayilmazlar@datamarket.com.tr\",\r\n    \"name\": \"Arda\",\r\n    \"surname\": \"Yılmazlar\",\r\n    \"ad_user\": true,\r\n    \"department_name\": \"Engineering\",\r\n    \"phone\": \"905555555555\"\r\n}\r\n\r\n//AD user eklerken password fieldını kaldır.\r\n\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/users",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\": 22,\r\n    \"username\": \"eyilmaz\",\r\n    \"password\": \"\",\r\n    \"foreign_id\": \"\",\r\n    \"email\": \"eyilmaz@testgmail.com\",\r\n    \"name\": \"Eren\",\r\n    \"surname\": \"Yilmaz\",\r\n    \"department_name\": \"\",\r\n    \"phone\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/users",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Users",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/users",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Me",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/me",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"me"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Change Own Pw",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"password\": \"test\",\r\n    \"new_password\": \"new_test_pw\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/user/change_password",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"user",
+										"change_password"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/users/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Admins",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/users/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Permissions",
+					"item": [
+						{
+							"name": "Grant Permission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 1,\r\n    \"scope_id\": 1,\r\n    \"chatbot_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Permissions of User",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/user/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"user",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Permissions of Agent",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/agent/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"agent",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revoke Permission",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"user_id\": 2,\r\n    \"scope_id\": 2,\r\n    \"chatbot_id\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List own permissions",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/me",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"me"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Groups",
+					"item": [
+						{
+							"name": "Members",
+							"item": [
+								{
+									"name": "Add Members to Group",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_id\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/1/members",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"admin",
+												"groups",
+												"1",
+												"members"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "List Group Members",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/1/members",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"admin",
+												"groups",
+												"1",
+												"members"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Remove Members from Group",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{ACCESS_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"user_id\": 1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/1/members",
+											"host": [
+												"{{API_URL}}"
+											],
+											"port": "{{API_PORT}}",
+											"path": [
+												"admin",
+												"groups",
+												"1",
+												"members"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "List Groups",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/groups",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Group\",\r\n    \"description\": \"Example description of a group.\",\r\n    \"external_id\": \"AD_ID123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/groups",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"groups",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/2",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"groups",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Test Group\",\r\n    \"description\": \"Example description of a group.\",\r\n    \"external_id\": \"AD_ID123\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/admin/groups/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"admin",
+										"groups",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revoke Permission of a Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"group_id\": 1,\r\n    \"chatbot_id\": 1,\r\n    \"scope_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/groups",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Grant Permission to Group",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"group_id\": 1,\r\n    \"chatbot_id\": 1,\r\n    \"scope_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/groups",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"groups"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Permissions of a Group",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"group_id\": 1,\r\n    \"chatbot_id\": 1,\r\n    \"scope_id\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/auth/permissions/groups/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"auth",
+										"permissions",
+										"groups",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Chat History",
+			"item": [
+				{
+					"name": "Create Chat History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test_History\",\r\n    \"bot_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat_history",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat_history"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Chat History",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Mail Forwarder\",\r\n    \"system_message\": \"You are a mail forwarding bot for a logistics company. You will be given a mail as input and you are supposed to forward the mail to the most relevant mail address. There are 3 subdivisions in this company: Air Shipment, Sea Shipment and Land Shipment. Their mail addresses in order is: airshp@datamarket.com.tr,seashp@datamarket.com.tr,landshp@datamarket.com.tr. Return the response in json format with following parameters: mail_address, reason_for_forwarding. reason_for_forwarding should be kept short.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/chat_history",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"chat_history"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 20 Aug 2024 10:02:33 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "46"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"title\": \"Mail Forwarder\",\n    \"chat_history_id\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Chat History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Test Title 3\",\r\n    \"chat_history_id\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat_history",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat_history"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Chat History",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Mail Forwarder\",\r\n    \"system_message\": \"You are a mail forwarding bot for a logistics company. You will be given a mail as input and you are supposed to forward the mail to the most relevant mail address. There are 3 subdivisions in this company: Air Shipment, Sea Shipment and Land Shipment. Their mail addresses in order is: airshp@datamarket.com.tr,seashp@datamarket.com.tr,landshp@datamarket.com.tr. Return the response in json format with following parameters: mail_address, reason_for_forwarding. reason_for_forwarding should be kept short.\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:3000/chat_history",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "3000",
+									"path": [
+										"chat_history"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Tue, 20 Aug 2024 10:02:33 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "46"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"title\": \"Mail Forwarder\",\n    \"chat_history_id\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Chat History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat_history/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat_history",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chat History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat_history/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat_history",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Chat History",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chat_history",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chat_history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/arda1/OneDrive/Masaüstü/Recording (7) - Copy.mp3"
+								},
+								{
+									"key": "chatbot_id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "overwrite",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/files",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/files/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"files",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Files",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/files",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Files Of Chatbot",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/files?chatbot_id=1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"files"
+							],
+							"query": [
+								{
+									"key": "chatbot_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chatbot",
+			"item": [
+				{
+					"name": "Create Chatbot",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"AI Assistant\",\r\n    \"system_prompt\": \"Answer questions truthfully.\",\r\n    \"image_url\": \"https://example.com/chatbot-image.png\",\r\n    \"theme\": \"light\",\r\n    \"subtitle\": \"Your friendly AI\",\r\n    \"description\": \"An AI chatbot to assist users with queries.\",\r\n    \"warning_message\": \"Please verify information from official sources.\",\r\n    \"chat_history_size\": 10,\r\n    \"index_search_size\": 6,\r\n    \"index_result_distance\": 10,\r\n    \"active\": true,\r\n    \"interactive\": true,\r\n    \"local_llm_instance_id\": 1,\r\n    \"llm_settings\": {\r\n        \"temperature\": 1,\r\n        \"top_p\": 1,\r\n        \"presence_penalty\": 0,\r\n        \"frequency_penalty\": 0,\r\n        \"max_token\": 128000\r\n    },\r\n    \"index_settings\": {\r\n        \"chunk_size\": 4096,\r\n        \"chunk_overlap\": 256\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Chatbot",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"AI Assistant\",\r\n    \"system_prompt\": \"You are a financial expert that analyzes the financial documents provided by a fund company. You need to extract the following information from the given context; Fund Name, Execution Date of the Credit, Security, Agent Bank, Current size of the credit, Tenor, Maturity Date, Benchmark 1, Margin, Benchmark 2, Margin 2, Arrangement Fee (Annual %), Non-UT/Commitment Fee, Type of Facility. All of these are columns for the table. If you cannot find a data in the given context, indicate that with N/A or N/D (Non Disclosed). Data needs to be accurate, so think about it carefully before presenting it. If calculations are needed to derive certain data, make sure to do them. Arrangement Fee (Annual %) usually needs it, so be careful with that one. Present the data in a table.\",\r\n    \"image_url\": \"https://example.com/chatbot-image.png\",\r\n    \"theme\": \"light\",\r\n    \"subtitle\": \"Your friendly AI\",\r\n    \"description\": \"An AI chatbot to assist users with queries.\",\r\n    \"warning_message\": \"Please verify information from official sources.\",\r\n    \"index_id\": 1,\r\n    \"chat_history_size\": 10,\r\n    \"index_search_size\": 6,\r\n    \"index_result_distance\": 10,\r\n    \"active\": true,\r\n    \"interactive\": true,\r\n    \"local_llm_instance_id\":1,\r\n    \"llm_settings\": {\r\n        \"temperature\": 1,\r\n        \"top_p\": 1,\r\n        \"presence_penalty\": 0,\r\n        \"frequency_penalty\": 0,\r\n        \"max_token\": 128000\r\n    },\r\n    \"index_settings\": {\r\n        \"chunk_size\": 4096,\r\n        \"chunk_overlap\": 256\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Chatbot",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"image_url\": \"test_url\",\r\n    \"system_prompt\": \"You are a bot.\",\r\n    \"name\": \"Test Bot\",\r\n    \"theme\": \"default\",\r\n    \"subtitle\": \"Subtitle\",\r\n    \"description\": \"Good bot to test.\",\r\n    \"warning_message\": \"Don't trust AI blindly.\",\r\n    \"index_id\": 1,\r\n    \"chat_history_size\": 10,\r\n    \"index_search_size\": 6\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Chatbots",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Chatbot",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Build Index",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"chatbot_id\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/build_index",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"build_index"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upload Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/arda1/OneDrive/Masaüstü/tester.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/3/image",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"3",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/2/image",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"2",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Image",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/chatbot/2/image",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"chatbot",
+								"2",
+								"image"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Conversation Starter",
+			"item": [
+				{
+					"name": "Delete CS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/conversation_starter/1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"conversation_starter",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create CS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bot_id\": 1,\r\n    \"prompt\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/conversation_starter",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"conversation_starter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get CS List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/conversation_starter?chatbot_id=1",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"conversation_starter"
+							],
+							"query": [
+								{
+									"key": "chatbot_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update CS",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cs_id\": 1,\r\n    \"prompt\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/conversation_starter",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"conversation_starter"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GPU",
+			"item": [
+				{
+					"name": "Get All GPUs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/gpu",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"gpu"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All GPUs with Instances",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/gpu/instances",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"gpu",
+								"instances"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Suggest GPU(s) for Instance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"local_llm_id\": 1,\r\n    \"tensor_parallel_size\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/gpu/suggest",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"gpu",
+								"suggest"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get GPU Metrics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ACCESS_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_URL}}:{{API_PORT}}/gpu/metrics",
+							"host": [
+								"{{API_URL}}"
+							],
+							"port": "{{API_PORT}}",
+							"path": [
+								"gpu",
+								"metrics"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Model",
+			"item": [
+				{
+					"name": "Local LLM",
+					"item": [
+						{
+							"name": "Create Local LLM",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"model_key\": \"llama-3.1-8b-awq\",\r\n  \"hf_name\": \"hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4\",\r\n  \"max_model_len\": 128000,\r\n  \"model_size\": 5728026624,\r\n  \"prompt_format\": \"LLAMA_3\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Local LLM",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"id\":1,\r\n  \"model_key\": \"Meta-Llama-3.1-8B-Instruct-AWQ-INT4\",\r\n  \"hf_name\": \"hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4\",\r\n  \"max_model_len\": 128000,\r\n  \"model_size\": 5728026624,\r\n  \"prompt_format\": \"LLAMA_3\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Local LLM",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Local LLMs",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download LLM",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm/1/download",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm",
+										"1",
+										"download"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Local LLM Instance",
+					"item": [
+						{
+							"name": "Create Local LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"local_llm_id\": 1,\r\n    \"gpu_ids\": [1],\r\n    \"name\": \"Optional-LLama3.1\",\r\n    \"tensor_parallel_size\": 1,\r\n    \"max_model_len_override\": 100000\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Local LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"local_llm_id\": 1,\r\n    \"gpu_ids\": [1],\r\n    \"name\": \"Optional-LLama3.1\",\r\n    \"tensor_parallel_size\": 1,\r\n    \"max_model_len_override\": 100000\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Local LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Local LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance/1",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Load LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance/1/load",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance",
+										"1",
+										"load"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Unload LLM Instance",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance/1/unload",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance",
+										"1",
+										"unload"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Local LLM Instances",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ACCESS_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{API_URL}}:{{API_PORT}}/local_llm_instance",
+									"host": [
+										"{{API_URL}}"
+									],
+									"port": "{{API_PORT}}",
+									"path": [
+										"local_llm_instance"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ACCESS_TOKEN\", pm.response.json()[\"access_token\"]);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"packages": {},
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_URL}}:{{API_PORT}}/auth/token",
+					"host": [
+						"{{API_URL}}"
+					],
+					"port": "{{API_PORT}}",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth Normal User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"ACCESS_TOKEN\", pm.response.json()[\"access_token\"]);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "ayilmazlar",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "test",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_URL}}:{{API_PORT}}/auth/token",
+					"host": [
+						"{{API_URL}}"
+					],
+					"port": "{{API_PORT}}",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token By External ID",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{ACCESS_TOKEN}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"external_id\": \"ayilmazlar@datamarket.com.tr\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_URL}}:{{API_PORT}}/auth/token_by_external_id",
+					"host": [
+						"{{API_URL}}"
+					],
+					"port": "{{API_PORT}}",
+					"path": [
+						"auth",
+						"token_by_external_id"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
