@@ -17,7 +17,7 @@ services:
       - UPLOAD_DIR=/app/uploads
       - DATABASE_URL=sqlite:////app/intpatient.db
       - MAX_UPLOAD_SIZE_MB=${MAX_UPLOAD_SIZE_MB:-50}
-      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:3080}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: unless-stopped
@@ -26,7 +26,7 @@ services:
     build: ./frontend
     container_name: intpatient-frontend
     ports:
-      - "80:80"
+      - "3080:80"
     depends_on:
       - backend
     restart: unless-stopped
