@@ -1,7 +1,11 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 
 from app.services.uppermind import authenticate, get_user
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -32,6 +36,7 @@ async def login(body: LoginRequest):
     try:
         auth_data = await authenticate(body.username, body.password)
     except Exception as exc:
+        logger.exception("Login failed for user=%s", body.username)
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(exc)}")
 
     access_token = auth_data.get("access_token")
