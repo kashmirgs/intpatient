@@ -1,10 +1,13 @@
+import asyncio
+import json
+import logging
 import os
 import time
 import uuid
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -14,6 +17,8 @@ from app.routers.auth import get_current_user
 from app.services.ocr import extract_text_from_image
 from app.services.pdf import extract_from_pdf
 from app.services.uppermind import translate
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 
@@ -56,11 +61,11 @@ async def upload_report(
     db.add(record)
     db.flush()
 
-    # Save files, extract text, translate
+    # Save files to disk and DB
     record_dir = os.path.join(settings.UPLOAD_DIR, "reports", str(record.id))
     os.makedirs(record_dir, exist_ok=True)
 
-    result_files = []
+    file_items = []
     for f in files:
         ext = _get_extension(f.filename)
         stored_name = f"{uuid.uuid4().hex}.{ext}"
@@ -79,66 +84,87 @@ async def upload_report(
         db.add(uploaded)
         db.flush()
 
-        # Extract text
-        ocr_failed = False
-        ocr_start = time.monotonic()
-        try:
-            if ext in ("jpg", "jpeg", "png"):
-                original_text = await extract_text_from_image(content)
-            elif ext == "pdf":
-                original_text = await extract_from_pdf(content)
-            else:
-                original_text = ""
-        except Exception as exc:
-            original_text = f"[OCR error: {repr(exc)}]"
-            ocr_failed = True
-        ocr_duration_ms = int((time.monotonic() - ocr_start) * 1000)
-
-        # Translate via UpperMind
-        translated_text = ""
-        translation_duration_ms = 0
-        if original_text.strip() and not ocr_failed:
-            translate_start = time.monotonic()
-            try:
-                translated_text = await translate(original_text, token)
-            except Exception as exc:
-                translated_text = f"[Translation error: {repr(exc)}]"
-            translation_duration_ms = int((time.monotonic() - translate_start) * 1000)
-
-        # Save translation
-        translation = Translation(
-            file_id=uploaded.id,
-            original_text=original_text,
-            translated_text=translated_text,
-            ocr_duration_ms=ocr_duration_ms,
-            translation_duration_ms=translation_duration_ms,
-        )
-        db.add(translation)
-
-        result_files.append({
-            "id": uploaded.id,
-            "original_filename": uploaded.original_filename,
-            "file_type": uploaded.file_type,
-            "download_url": f"/api/reports/files/{uploaded.id}",
-            "translation": {
-                "original_text": original_text,
-                "translated_text": translated_text,
-                "ocr_duration_ms": ocr_duration_ms,
-                "translation_duration_ms": translation_duration_ms,
-            },
+        file_items.append({
+            "uploaded_id": uploaded.id,
+            "filename": f.filename,
+            "ext": ext,
+            "content": content,
         })
 
     db.commit()
-    db.refresh(record)
 
-    return {
-        "id": record.id,
-        "record_type": record.record_type,
-        "patient_note": record.patient_note,
-        "created_at": record.created_at.isoformat(),
-        "created_by": record.created_by,
-        "files": result_files,
-    }
+    async def _process_stream():
+        total = len(file_items)
+        ocr_results = [None] * total
+
+        # Phase 1 - OCR (sequential)
+        for i, item in enumerate(file_items):
+            start = time.monotonic()
+            try:
+                if item["ext"] in ("jpg", "jpeg", "png"):
+                    text = await extract_text_from_image(item["content"])
+                elif item["ext"] == "pdf":
+                    text = await extract_from_pdf(item["content"])
+                else:
+                    text = ""
+                ocr_results[i] = {"text": text, "failed": False, "duration_ms": int((time.monotonic() - start) * 1000)}
+            except Exception as exc:
+                logger.exception("OCR failed for file %s", item["filename"])
+                ocr_results[i] = {"text": f"[OCR error: {repr(exc)}]", "failed": True, "duration_ms": int((time.monotonic() - start) * 1000)}
+            yield f"data: {json.dumps({'phase': 'ocr', 'done': i + 1, 'total': total})}\n\n"
+
+        # Phase 2 - Translation (parallel, max 4)
+        semaphore = asyncio.Semaphore(4)
+        progress_queue = asyncio.Queue()
+        translatable = [i for i in range(total) if not ocr_results[i]["failed"] and ocr_results[i]["text"].strip()]
+        translate_total = len(translatable)
+        translate_results = [{"text": "", "duration_ms": 0} for _ in range(total)]
+
+        if translate_total > 0:
+            async def translate_task(idx):
+                async with semaphore:
+                    start = time.monotonic()
+                    try:
+                        text = await translate(ocr_results[idx]["text"], token)
+                    except Exception as exc:
+                        text = f"[Translation error: {repr(exc)}]"
+                    translate_results[idx] = {"text": text, "duration_ms": int((time.monotonic() - start) * 1000)}
+                await progress_queue.put(idx)
+
+            tasks = [asyncio.create_task(translate_task(i)) for i in translatable]
+            for done_count in range(1, translate_total + 1):
+                await progress_queue.get()
+                yield f"data: {json.dumps({'phase': 'translation', 'done': done_count, 'total': translate_total})}\n\n"
+            await asyncio.gather(*tasks)
+
+        # Phase 3 - DB save + final event
+        result_files = []
+        for i, item in enumerate(file_items):
+            t = Translation(
+                file_id=item["uploaded_id"],
+                original_text=ocr_results[i]["text"],
+                translated_text=translate_results[i]["text"],
+                ocr_duration_ms=ocr_results[i]["duration_ms"],
+                translation_duration_ms=translate_results[i]["duration_ms"],
+            )
+            db.add(t)
+            result_files.append({
+                "id": item["uploaded_id"],
+                "original_filename": item["filename"],
+                "file_type": item["ext"],
+                "download_url": f"/api/reports/files/{item['uploaded_id']}",
+                "translation": {
+                    "original_text": ocr_results[i]["text"],
+                    "translated_text": translate_results[i]["text"],
+                    "ocr_duration_ms": ocr_results[i]["duration_ms"],
+                    "translation_duration_ms": translate_results[i]["duration_ms"],
+                },
+            })
+        db.commit()
+
+        yield f"data: {json.dumps({'phase': 'complete', 'result': {'id': record.id, 'record_type': record.record_type, 'patient_note': record.patient_note, 'created_at': record.created_at.isoformat(), 'created_by': record.created_by, 'files': result_files}})}\n\n"
+
+    return StreamingResponse(_process_stream(), media_type="text/event-stream")
 
 
 @router.get("/records")

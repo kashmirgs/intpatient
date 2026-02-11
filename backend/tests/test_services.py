@@ -177,6 +177,56 @@ class TestOCRService:
 
             assert result == ""
 
+    @pytest.mark.asyncio
+    async def test_glm_ocr_sends_correct_prompt(self):
+        """Test that glm-ocr model uses its own prompt instead of deepseek-ocr prompt."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"response": "Extracted text"}
+
+        with patch("httpx.AsyncClient") as MockClient, \
+             patch("app.services.ocr.settings") as mock_settings:
+            mock_settings.OLLAMA_URL = "http://localhost:11434"
+            mock_settings.OLLAMA_MODEL = "glm-ocr"
+
+            mock_client_instance = AsyncMock()
+            mock_client_instance.post.return_value = mock_response
+            mock_client_instance.__aenter__ = AsyncMock(return_value=mock_client_instance)
+            mock_client_instance.__aexit__ = AsyncMock(return_value=False)
+            MockClient.return_value = mock_client_instance
+
+            from app.services.ocr import extract_text_from_image
+            result = await extract_text_from_image(b"fake-image-bytes")
+
+            assert result == "Extracted text"
+            call_kwargs = mock_client_instance.post.call_args
+            sent_json = call_kwargs.kwargs.get("json") or call_kwargs[1].get("json")
+            assert sent_json["prompt"] == "OCR"
+            assert sent_json["model"] == "glm-ocr"
+
+    @pytest.mark.asyncio
+    async def test_deepseek_preamble_stripped(self):
+        """Test that deepseek-ocr preamble is stripped from response."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"response": "Do not change the text\nActual content"}
+
+        with patch("httpx.AsyncClient") as MockClient, \
+             patch("app.services.ocr.settings") as mock_settings:
+            mock_settings.OLLAMA_URL = "http://localhost:11434"
+            mock_settings.OLLAMA_MODEL = "deepseek-ocr"
+
+            mock_client_instance = AsyncMock()
+            mock_client_instance.post.return_value = mock_response
+            mock_client_instance.__aenter__ = AsyncMock(return_value=mock_client_instance)
+            mock_client_instance.__aexit__ = AsyncMock(return_value=False)
+            MockClient.return_value = mock_client_instance
+
+            from app.services.ocr import extract_text_from_image
+            result = await extract_text_from_image(b"fake-image-bytes")
+
+            assert result == "Actual content"
+
 
 class TestPDFService:
     @pytest.mark.asyncio

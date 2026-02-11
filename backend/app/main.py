@@ -1,6 +1,9 @@
+import logging
 import os
 
 from fastapi import FastAPI
+
+logging.basicConfig(level=logging.INFO)
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings

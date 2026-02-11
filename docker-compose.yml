@@ -10,7 +10,7 @@ services:
       - ./uploads:/app/uploads
       - ./intpatient.db:/app/intpatient.db
     environment:
-      - UPPERMIND_URL=${UPPERMIND_URL:-http://10.10.0.149:3000}
+      - UPPERMIND_URL=${UPPERMIND_URL:-http://localhost:3000}
       - OLLAMA_URL=${OLLAMA_URL:-http://host.docker.internal:11434}
       - OLLAMA_MODEL=${OLLAMA_MODEL:-deepseek-ocr}
       - TRANSLATOR_AGENT_ID=${TRANSLATOR_AGENT_ID:-1}

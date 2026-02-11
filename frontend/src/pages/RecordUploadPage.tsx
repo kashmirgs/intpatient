@@ -39,6 +39,8 @@ export default function RecordUploadPage() {
   const [radiologyResult, setRadiologyResult] = useState<RadiologyResult | null>(null)
   const [reportResult, setReportResult] = useState<ReportResult | null>(null)
   const [expandedTexts, setExpandedTexts] = useState<{ [key: string]: boolean }>({})
+  const [ocrProgress, setOcrProgress] = useState<{ done: number; total: number } | null>(null)
+  const [translationProgress, setTranslationProgress] = useState<{ done: number; total: number } | null>(null)
 
   const handleRadiologyFiles = useCallback((files: File[]) => {
     setRadiologyFiles(files)
@@ -67,6 +69,8 @@ export default function RecordUploadPage() {
     setRadiologyResult(null)
     setReportResult(null)
     setUploadProgress(0)
+    setOcrProgress(null)
+    setTranslationProgress(null)
 
     const promises: Promise<void>[] = []
 
@@ -102,16 +106,55 @@ export default function RecordUploadPage() {
       if (patientNote.trim()) formData.append('patient_note', patientNote.trim())
 
       promises.push(
-        apiClient
-          .post('/api/reports/upload', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+        (async () => {
+          const token = sessionStorage.getItem('token')
+          const response = await fetch('/api/reports/upload', {
+            method: 'POST',
+            headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+            body: formData,
           })
-          .then((res) => {
-            setReportResult({ success: true, files: res.data.files })
-          })
-          .catch((err) => {
-            setReportResult({ success: false, error: extractError(err) })
-          })
+
+          if (response.status === 401) {
+            sessionStorage.removeItem('token')
+            sessionStorage.removeItem('user')
+            window.location.href = '/login'
+            return
+          }
+          if (!response.ok) {
+            const errorData = await response.json().catch(() => null)
+            setReportResult({ success: false, error: errorData?.detail || 'Yükleme sırasında bir hata oluştu.' })
+            return
+          }
+
+          const reader = response.body!.getReader()
+          const decoder = new TextDecoder()
+          let buffer = ''
+
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
+            buffer += decoder.decode(value, { stream: true })
+            const parts = buffer.split('\n\n')
+            buffer = parts.pop() || ''
+
+            for (const part of parts) {
+              const line = part.trim()
+              if (!line.startsWith('data: ')) continue
+              try {
+                const payload = JSON.parse(line.slice(6))
+                if (payload.phase === 'ocr') {
+                  setOcrProgress({ done: payload.done, total: payload.total })
+                } else if (payload.phase === 'translation') {
+                  setTranslationProgress({ done: payload.done, total: payload.total })
+                } else if (payload.phase === 'complete') {
+                  setReportResult({ success: true, files: payload.result.files })
+                }
+              } catch { /* malformed event, ignore */ }
+            }
+          }
+        })().catch(() => {
+          setReportResult({ success: false, error: 'Sunucu ile bağlantı kurulamadı.' })
+        })
       )
     }
 
@@ -137,6 +180,8 @@ export default function RecordUploadPage() {
     setRadiologyResult(null)
     setReportResult(null)
     setExpandedTexts({})
+    setOcrProgress(null)
+    setTranslationProgress(null)
   }
 
   const toggleText = (key: string) => {
@@ -212,27 +257,25 @@ export default function RecordUploadPage() {
                               <div style={styles.error}>
                                 OCR hatası: Metin çıkarılamadı. Lütfen dosyayı kontrol edip tekrar deneyin.
                               </div>
-                            ) : (
+                            ) : file.translation.original_text ? (
                               <>
-                                {file.translation.original_text && (
-                                  <div className="card" style={{ marginBottom: '12px' }}>
-                                    <h4
-                                      style={{ ...styles.resultTitle, cursor: 'pointer', userSelect: 'none' }}
-                                      onClick={() => toggleText(`${index}-original`)}
-                                    >
-                                      <span style={{ marginRight: '6px' }}>{expandedTexts[`${index}-original`] ? '▾' : '▸'}</span>
-                                      Orijinal Metin (OCR)
-                                      {formatDuration(file.translation.ocr_duration_ms) && (
-                                        <span style={styles.durationText}>{formatDuration(file.translation.ocr_duration_ms)}</span>
-                                      )}
-                                    </h4>
-                                    <pre style={{
-                                      ...styles.resultText,
-                                      maxHeight: expandedTexts[`${index}-original`] ? 'none' : '3.2em',
-                                      overflow: expandedTexts[`${index}-original`] ? 'visible' : 'hidden',
-                                    }}>{file.translation.original_text}</pre>
-                                  </div>
-                                )}
+                                <div className="card" style={{ marginBottom: '12px' }}>
+                                  <h4
+                                    style={{ ...styles.resultTitle, cursor: 'pointer', userSelect: 'none' }}
+                                    onClick={() => toggleText(`${index}-original`)}
+                                  >
+                                    <span style={{ marginRight: '6px' }}>{expandedTexts[`${index}-original`] ? '▾' : '▸'}</span>
+                                    Orijinal Metin (OCR)
+                                    {formatDuration(file.translation.ocr_duration_ms) && (
+                                      <span style={styles.durationText}>{formatDuration(file.translation.ocr_duration_ms)}</span>
+                                    )}
+                                  </h4>
+                                  <pre style={{
+                                    ...styles.resultText,
+                                    maxHeight: expandedTexts[`${index}-original`] ? 'none' : '3.2em',
+                                    overflow: expandedTexts[`${index}-original`] ? 'visible' : 'hidden',
+                                  }}>{file.translation.original_text}</pre>
+                                </div>
                                 {translationFailed ? (
                                   <div style={styles.error}>
                                     Çeviri hatası: Çeviri yapılamadı.
@@ -244,7 +287,7 @@ export default function RecordUploadPage() {
                                       onClick={() => toggleText(`${index}-translated`)}
                                     >
                                       <span style={{ marginRight: '6px' }}>{expandedTexts[`${index}-translated`] ? '▾' : '▸'}</span>
-                                      Türkçe Çeviri
+                                      Çeviri
                                       {formatDuration(file.translation.translation_duration_ms) && (
                                         <span style={styles.durationText}>{formatDuration(file.translation.translation_duration_ms)}</span>
                                       )}
@@ -257,6 +300,8 @@ export default function RecordUploadPage() {
                                   </div>
                                 )}
                               </>
+                            ) : (
+                              <div style={styles.warning}>Bu dosyada metin bulunamadı.</div>
                             )}
                           </div>
                         )
@@ -345,7 +390,14 @@ export default function RecordUploadPage() {
                   <div style={styles.processingWrap}>
                     <div style={styles.spinner} />
                     <span style={styles.processingLabel}>
-                      OCR ve çeviri işleniyor...
+                      {ocrProgress && ocrProgress.done < ocrProgress.total
+                        ? `OCR işleniyor... ${ocrProgress.done}/${ocrProgress.total}`
+                        : translationProgress && translationProgress.done < translationProgress.total
+                          ? `Çeviri yapılıyor... ${translationProgress.done}/${translationProgress.total}`
+                          : ocrProgress && translationProgress
+                            ? 'Tamamlanıyor...'
+                            : 'Dosyalar yükleniyor...'
+                      }
                     </span>
                   </div>
                 )}

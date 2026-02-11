@@ -137,50 +137,64 @@ export default function RecordDetailPage() {
               </div>
 
               {detail.record_type === 'report' &&
-                detail.files.map((file) =>
-                  file.translations?.map((t) => (
+                detail.files.map((file) => {
+                  const hasTranslations = file.translations && file.translations.length > 0
+                  if (!hasTranslations) {
+                    return (
+                      <div key={file.id} style={styles.section}>
+                        <div style={styles.warning}>{file.original_filename}: Bu dosyada metin bulunamadı.</div>
+                      </div>
+                    )
+                  }
+                  return file.translations!.map((t) => (
                     <React.Fragment key={t.id}>
-                      {t.original_text && (
+                      {t.original_text ? (
+                        <>
+                          <div style={styles.section}>
+                            <h4
+                              style={{ ...styles.sectionLabel, color: '#7e79b8', cursor: 'pointer', userSelect: 'none' }}
+                              onClick={() => toggleText(`${t.id}-original`)}
+                            >
+                              <span style={{ marginRight: '6px' }}>{expandedTexts[`${t.id}-original`] ? '▾' : '▸'}</span>
+                              Orijinal Metin - {file.original_filename}
+                              {formatDuration(t.ocr_duration_ms) && (
+                                <span style={styles.durationText}>{formatDuration(t.ocr_duration_ms)}</span>
+                              )}
+                            </h4>
+                            <pre style={{
+                              ...styles.preText,
+                              maxHeight: expandedTexts[`${t.id}-original`] ? 'none' : '3.2em',
+                              overflow: expandedTexts[`${t.id}-original`] ? 'visible' : 'hidden',
+                            }}>{t.original_text}</pre>
+                          </div>
+                          {t.translated_text && (
+                            <div style={styles.section}>
+                              <h4
+                                style={{ ...styles.sectionLabel, color: '#e55fa2', cursor: 'pointer', userSelect: 'none' }}
+                                onClick={() => toggleText(`${t.id}-translated`)}
+                              >
+                                <span style={{ marginRight: '6px' }}>{expandedTexts[`${t.id}-translated`] ? '▾' : '▸'}</span>
+                                Çeviri - {file.original_filename}
+                                {formatDuration(t.translation_duration_ms) && (
+                                  <span style={styles.durationText}>{formatDuration(t.translation_duration_ms)}</span>
+                                )}
+                              </h4>
+                              <div style={{
+                                ...styles.markdownText,
+                                maxHeight: expandedTexts[`${t.id}-translated`] ? 'none' : '3.2em',
+                                overflow: expandedTexts[`${t.id}-translated`] ? 'visible' : 'hidden',
+                              }}><ReactMarkdown>{t.translated_text}</ReactMarkdown></div>
+                            </div>
+                          )}
+                        </>
+                      ) : (
                         <div style={styles.section}>
-                          <h4
-                            style={{ ...styles.sectionLabel, color: '#7e79b8', cursor: 'pointer', userSelect: 'none' }}
-                            onClick={() => toggleText(`${t.id}-original`)}
-                          >
-                            <span style={{ marginRight: '6px' }}>{expandedTexts[`${t.id}-original`] ? '▾' : '▸'}</span>
-                            Orijinal Metin - {file.original_filename}
-                            {formatDuration(t.ocr_duration_ms) && (
-                              <span style={styles.durationText}>{formatDuration(t.ocr_duration_ms)}</span>
-                            )}
-                          </h4>
-                          <pre style={{
-                            ...styles.preText,
-                            maxHeight: expandedTexts[`${t.id}-original`] ? 'none' : '3.2em',
-                            overflow: expandedTexts[`${t.id}-original`] ? 'visible' : 'hidden',
-                          }}>{t.original_text}</pre>
-                        </div>
-                      )}
-                      {t.translated_text && (
-                        <div style={styles.section}>
-                          <h4
-                            style={{ ...styles.sectionLabel, color: '#e55fa2', cursor: 'pointer', userSelect: 'none' }}
-                            onClick={() => toggleText(`${t.id}-translated`)}
-                          >
-                            <span style={{ marginRight: '6px' }}>{expandedTexts[`${t.id}-translated`] ? '▾' : '▸'}</span>
-                            Türkçe Çeviri - {file.original_filename}
-                            {formatDuration(t.translation_duration_ms) && (
-                              <span style={styles.durationText}>{formatDuration(t.translation_duration_ms)}</span>
-                            )}
-                          </h4>
-                          <div style={{
-                            ...styles.markdownText,
-                            maxHeight: expandedTexts[`${t.id}-translated`] ? 'none' : '3.2em',
-                            overflow: expandedTexts[`${t.id}-translated`] ? 'visible' : 'hidden',
-                          }}><ReactMarkdown>{t.translated_text}</ReactMarkdown></div>
+                          <div style={styles.warning}>{file.original_filename}: Bu dosyada metin bulunamadı.</div>
                         </div>
                       )}
                     </React.Fragment>
                   ))
-                )}
+                })}
             </div>
           )}
         </div>
@@ -283,6 +297,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     background: '#fafaff',
     borderRadius: '8px',
     border: '1px solid #e0e0eb',
+  },
+  warning: {
+    padding: '10px 14px',
+    background: 'rgba(255, 152, 0, 0.08)',
+    color: '#e65100',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: 500,
   },
   durationText: {
     fontSize: '12px',
