@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
 import RecordUploadPage from './pages/RecordUploadPage'
 import RecordsPage from './pages/RecordsPage'
+import RecordDetailPage from './pages/RecordDetailPage'
 
 export default function App() {
   return (
@@ -32,6 +33,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <RecordsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/records/:type/:id"
+          element={
+            <ProtectedRoute>
+              <RecordDetailPage />
             </ProtectedRoute>
           }
         />

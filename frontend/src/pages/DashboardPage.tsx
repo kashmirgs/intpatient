@@ -94,7 +94,11 @@ export default function DashboardPage() {
             ) : (
               <div style={styles.recordsList}>
                 {recentRecords.map((record) => (
-                  <div key={`${record.record_type}-${record.id}`} style={styles.recordItem}>
+                  <Link
+                    key={`${record.record_type}-${record.id}`}
+                    to={`/records/${record.record_type}/${record.id}`}
+                    style={styles.recordItem}
+                  >
                     <div style={styles.recordLeft}>
                       <span
                         className={`badge ${record.record_type === 'radiology' ? 'badge-radiology' : 'badge-report'}`}
@@ -113,7 +117,7 @@ export default function DashboardPage() {
                         {formatDate(record.created_at)}
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
@@ -216,6 +220,10 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'space-between',
     padding: '14px 24px',
     borderBottom: '1px solid #f0f0f5',
+    textDecoration: 'none',
+    color: 'inherit',
+    cursor: 'pointer',
+    transition: 'background 0.15s ease',
   },
   recordLeft: {
     display: 'flex',

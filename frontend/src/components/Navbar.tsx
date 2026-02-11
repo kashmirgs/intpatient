@@ -109,7 +109,7 @@ export default function Navbar() {
 
 const styles: Record<string, React.CSSProperties> = {
   nav: {
-    background: '#7e79b8',
+    background: '#9490c8',
     height: '60px',
     position: 'sticky',
     top: 0,
