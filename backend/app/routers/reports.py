@@ -90,7 +90,7 @@ async def upload_report(
             else:
                 original_text = ""
         except Exception as exc:
-            original_text = f"[OCR error: {str(exc)}]"
+            original_text = f"[OCR error: {repr(exc)}]"
             ocr_failed = True
         ocr_duration_ms = int((time.monotonic() - ocr_start) * 1000)
 
@@ -102,7 +102,7 @@ async def upload_report(
             try:
                 translated_text = await translate(original_text, token)
             except Exception as exc:
-                translated_text = f"[Translation error: {str(exc)}]"
+                translated_text = f"[Translation error: {repr(exc)}]"
             translation_duration_ms = int((time.monotonic() - translate_start) * 1000)
 
         # Save translation

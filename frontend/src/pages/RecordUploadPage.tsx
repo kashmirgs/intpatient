@@ -38,6 +38,7 @@ export default function RecordUploadPage() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [radiologyResult, setRadiologyResult] = useState<RadiologyResult | null>(null)
   const [reportResult, setReportResult] = useState<ReportResult | null>(null)
+  const [expandedTexts, setExpandedTexts] = useState<{ [key: string]: boolean }>({})
 
   const handleRadiologyFiles = useCallback((files: File[]) => {
     setRadiologyFiles(files)
@@ -135,6 +136,11 @@ export default function RecordUploadPage() {
     setUploadProgress(0)
     setRadiologyResult(null)
     setReportResult(null)
+    setExpandedTexts({})
+  }
+
+  const toggleText = (key: string) => {
+    setExpandedTexts((prev) => ({ ...prev, [key]: !prev[key] }))
   }
 
   return (
@@ -210,13 +216,21 @@ export default function RecordUploadPage() {
                               <>
                                 {file.translation.original_text && (
                                   <div className="card" style={{ marginBottom: '12px' }}>
-                                    <h4 style={styles.resultTitle}>
+                                    <h4
+                                      style={{ ...styles.resultTitle, cursor: 'pointer', userSelect: 'none' }}
+                                      onClick={() => toggleText(`${index}-original`)}
+                                    >
+                                      <span style={{ marginRight: '6px' }}>{expandedTexts[`${index}-original`] ? '▾' : '▸'}</span>
                                       Orijinal Metin (OCR)
                                       {formatDuration(file.translation.ocr_duration_ms) && (
                                         <span style={styles.durationText}>{formatDuration(file.translation.ocr_duration_ms)}</span>
                                       )}
                                     </h4>
-                                    <pre style={styles.resultText}>{file.translation.original_text}</pre>
+                                    <pre style={{
+                                      ...styles.resultText,
+                                      maxHeight: expandedTexts[`${index}-original`] ? 'none' : '3.2em',
+                                      overflow: expandedTexts[`${index}-original`] ? 'visible' : 'hidden',
+                                    }}>{file.translation.original_text}</pre>
                                   </div>
                                 )}
                                 {translationFailed ? (
@@ -225,13 +239,21 @@ export default function RecordUploadPage() {
                                   </div>
                                 ) : file.translation.translated_text && (
                                   <div className="card">
-                                    <h4 style={styles.resultTitleAccent}>
+                                    <h4
+                                      style={{ ...styles.resultTitleAccent, cursor: 'pointer', userSelect: 'none' }}
+                                      onClick={() => toggleText(`${index}-translated`)}
+                                    >
+                                      <span style={{ marginRight: '6px' }}>{expandedTexts[`${index}-translated`] ? '▾' : '▸'}</span>
                                       Türkçe Çeviri
                                       {formatDuration(file.translation.translation_duration_ms) && (
                                         <span style={styles.durationText}>{formatDuration(file.translation.translation_duration_ms)}</span>
                                       )}
                                     </h4>
-                                    <div style={styles.markdownText}><ReactMarkdown>{file.translation.translated_text}</ReactMarkdown></div>
+                                    <div style={{
+                                      ...styles.markdownText,
+                                      maxHeight: expandedTexts[`${index}-translated`] ? 'none' : '3.2em',
+                                      overflow: expandedTexts[`${index}-translated`] ? 'visible' : 'hidden',
+                                    }}><ReactMarkdown>{file.translation.translated_text}</ReactMarkdown></div>
                                   </div>
                                 )}
                               </>
