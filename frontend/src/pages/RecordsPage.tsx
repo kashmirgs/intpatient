@@ -108,6 +108,16 @@ export default function RecordsPage() {
     }
   }
 
+  const handleDownload = async (url: string, filename: string) => {
+    const res = await apiClient.get(url, { responseType: 'blob' })
+    const blobUrl = URL.createObjectURL(res.data)
+    const a = document.createElement('a')
+    a.href = blobUrl
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(blobUrl)
+  }
+
   const filters: { key: RecordFilter; label: string }[] = [
     { key: 'all', label: 'Tümü' },
     { key: 'radiology', label: 'Radyoloji' },
@@ -214,9 +224,7 @@ export default function RecordsPage() {
                             {expandedDetail.files.map((file) => (
                               <a
                                 key={file.id}
-                                href={file.download_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                                onClick={() => handleDownload(file.download_url, file.original_filename)}
                                 style={styles.fileLink}
                               >
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7e79b8" strokeWidth="2">
@@ -403,6 +411,7 @@ const styles: { [key: string]: React.CSSProperties } = {
     color: '#7e79b8',
     fontWeight: 500,
     padding: '6px 0',
+    cursor: 'pointer',
   },
   preText: {
     fontSize: '13px',
