@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import Navbar from '../components/Navbar'
 import apiClient from '../api/client'
 
@@ -29,6 +30,8 @@ interface RecordDetail {
       id: number
       original_text: string
       translated_text: string
+      ocr_duration_ms?: number
+      translation_duration_ms?: number
     }[]
   }[]
 }
@@ -78,6 +81,11 @@ export default function RecordsPage() {
       hour: '2-digit',
       minute: '2-digit',
     })
+  }
+
+  const formatDuration = (ms?: number) => {
+    if (ms == null) return null
+    return ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`
   }
 
   const toggleExpand = async (record: RecordItem) => {
@@ -230,6 +238,9 @@ export default function RecordsPage() {
                                   <div style={styles.detailSection}>
                                     <h4 style={{ ...styles.detailLabel, color: '#7e79b8' }}>
                                       Orijinal Metin - {file.original_filename}
+                                      {formatDuration(t.ocr_duration_ms) && (
+                                        <span style={styles.durationText}>{formatDuration(t.ocr_duration_ms)}</span>
+                                      )}
                                     </h4>
                                     <pre style={styles.preText}>{t.original_text}</pre>
                                   </div>
@@ -238,8 +249,11 @@ export default function RecordsPage() {
                                   <div style={styles.detailSection}>
                                     <h4 style={{ ...styles.detailLabel, color: '#e55fa2' }}>
                                       Türkçe Çeviri - {file.original_filename}
+                                      {formatDuration(t.translation_duration_ms) && (
+                                        <span style={styles.durationText}>{formatDuration(t.translation_duration_ms)}</span>
+                                      )}
                                     </h4>
-                                    <pre style={styles.preText}>{t.translated_text}</pre>
+                                    <div style={styles.markdownText}><ReactMarkdown>{t.translated_text}</ReactMarkdown></div>
                                   </div>
                                 )}
                               </React.Fragment>
@@ -402,5 +416,23 @@ const styles: { [key: string]: React.CSSProperties } = {
     background: '#fff',
     borderRadius: '8px',
     border: '1px solid #e0e0eb',
+  },
+  markdownText: {
+    fontSize: '13px',
+    lineHeight: '1.6',
+    color: '#2d2d3d',
+    wordBreak: 'break-word' as const,
+    padding: '12px',
+    background: '#fff',
+    borderRadius: '8px',
+    border: '1px solid #e0e0eb',
+  },
+  durationText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#9e9eb0',
+    marginLeft: '8px',
+    textTransform: 'none' as const,
+    letterSpacing: 'normal',
   },
 }

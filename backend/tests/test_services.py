@@ -62,6 +62,44 @@ class TestUpperMindService:
             assert result["username"] == "testuser"
 
     @pytest.mark.asyncio
+    async def test_translate_success_ai_message_field(self):
+        """Test translation with ai_message field containing assistantfinal marker."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"ai_message": "preamble assistantfinal Çevrilmiş metin"}
+
+        with patch("httpx.AsyncClient") as MockClient:
+            mock_client_instance = AsyncMock()
+            mock_client_instance.post.return_value = mock_response
+            mock_client_instance.__aenter__ = AsyncMock(return_value=mock_client_instance)
+            mock_client_instance.__aexit__ = AsyncMock(return_value=False)
+            MockClient.return_value = mock_client_instance
+
+            from app.services.uppermind import translate
+            result = await translate("Translated text", "token")
+
+            assert result == "Çevrilmiş metin"
+
+    @pytest.mark.asyncio
+    async def test_translate_without_assistantfinal(self):
+        """Test translation without assistantfinal marker returns full text."""
+        mock_response = MagicMock()
+        mock_response.status_code = 200
+        mock_response.json.return_value = {"ai_message": "Doğrudan çeviri metni"}
+
+        with patch("httpx.AsyncClient") as MockClient:
+            mock_client_instance = AsyncMock()
+            mock_client_instance.post.return_value = mock_response
+            mock_client_instance.__aenter__ = AsyncMock(return_value=mock_client_instance)
+            mock_client_instance.__aexit__ = AsyncMock(return_value=False)
+            MockClient.return_value = mock_client_instance
+
+            from app.services.uppermind import translate
+            result = await translate("Direct translation text", "token")
+
+            assert result == "Doğrudan çeviri metni"
+
+    @pytest.mark.asyncio
     async def test_translate_success_response_field(self):
         """Test translation with response field in result."""
         mock_response = MagicMock()

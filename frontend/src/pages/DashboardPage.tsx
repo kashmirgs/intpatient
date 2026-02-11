@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import { useAuth } from '../hooks/useAuth'
 import apiClient from '../api/client'
@@ -14,6 +14,7 @@ interface RecentRecord {
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const location = useLocation()
   const [recentRecords, setRecentRecords] = useState<RecentRecord[]>([])
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function DashboardPage() {
       }
     }
     fetchRecords()
-  }, [])
+  }, [location.key])
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString('tr-TR', {

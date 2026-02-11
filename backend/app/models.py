@@ -39,6 +39,8 @@ class Translation(Base):
     file_id = Column(Integer, ForeignKey("uploaded_files.id"), nullable=False)
     original_text = Column(Text, nullable=False)
     translated_text = Column(Text, nullable=False)
+    ocr_duration_ms = Column(Integer, nullable=True)
+    translation_duration_ms = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     file = relationship("UploadedFile", back_populates="translations")

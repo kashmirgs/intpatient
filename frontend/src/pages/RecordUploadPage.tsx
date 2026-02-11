@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import ReactMarkdown from 'react-markdown'
 import Navbar from '../components/Navbar'
 import FileUploader from '../components/FileUploader'
 import apiClient from '../api/client'
@@ -11,6 +12,8 @@ interface FileTranslation {
   translation: {
     original_text: string
     translated_text: string
+    ocr_duration_ms?: number
+    translation_duration_ms?: number
   }
 }
 
@@ -119,6 +122,11 @@ export default function RecordUploadPage() {
     (radiologyResult && !radiologyResult.success) ||
     (reportResult && !reportResult.success)
 
+  const formatDuration = (ms?: number) => {
+    if (ms == null) return null
+    return ms >= 1000 ? `${(ms / 1000).toFixed(1)}s` : `${ms}ms`
+  }
+
   const resetForm = () => {
     setRadiologyFiles([])
     setReportFiles([])
@@ -202,7 +210,12 @@ export default function RecordUploadPage() {
                               <>
                                 {file.translation.original_text && (
                                   <div className="card" style={{ marginBottom: '12px' }}>
-                                    <h4 style={styles.resultTitle}>Orijinal Metin (OCR)</h4>
+                                    <h4 style={styles.resultTitle}>
+                                      Orijinal Metin (OCR)
+                                      {formatDuration(file.translation.ocr_duration_ms) && (
+                                        <span style={styles.durationText}>{formatDuration(file.translation.ocr_duration_ms)}</span>
+                                      )}
+                                    </h4>
                                     <pre style={styles.resultText}>{file.translation.original_text}</pre>
                                   </div>
                                 )}
@@ -212,8 +225,13 @@ export default function RecordUploadPage() {
                                   </div>
                                 ) : file.translation.translated_text && (
                                   <div className="card">
-                                    <h4 style={styles.resultTitleAccent}>Türkçe Çeviri</h4>
-                                    <pre style={styles.resultText}>{file.translation.translated_text}</pre>
+                                    <h4 style={styles.resultTitleAccent}>
+                                      Türkçe Çeviri
+                                      {formatDuration(file.translation.translation_duration_ms) && (
+                                        <span style={styles.durationText}>{formatDuration(file.translation.translation_duration_ms)}</span>
+                                      )}
+                                    </h4>
+                                    <div style={styles.markdownText}><ReactMarkdown>{file.translation.translated_text}</ReactMarkdown></div>
                                   </div>
                                 )}
                               </>
@@ -493,6 +511,18 @@ const styles: { [key: string]: React.CSSProperties } = {
     wordBreak: 'break-word',
     fontFamily: 'inherit',
     margin: 0,
+  },
+  markdownText: {
+    fontSize: '13px',
+    lineHeight: '1.6',
+    color: '#2d2d3d',
+    wordBreak: 'break-word' as const,
+  },
+  durationText: {
+    fontSize: '12px',
+    fontWeight: 400,
+    color: '#9e9eb0',
+    marginLeft: '8px',
   },
   resultActions: {
     display: 'flex',

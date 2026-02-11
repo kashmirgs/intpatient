@@ -1,4 +1,5 @@
 import os
+import time
 import uuid
 from typing import List
 
@@ -80,6 +81,7 @@ async def upload_report(
 
         # Extract text
         ocr_failed = False
+        ocr_start = time.monotonic()
         try:
             if ext in ("jpg", "jpeg", "png"):
                 original_text = await extract_text_from_image(content)
@@ -90,20 +92,26 @@ async def upload_report(
         except Exception as exc:
             original_text = f"[OCR error: {str(exc)}]"
             ocr_failed = True
+        ocr_duration_ms = int((time.monotonic() - ocr_start) * 1000)
 
         # Translate via UpperMind
         translated_text = ""
+        translation_duration_ms = 0
         if original_text.strip() and not ocr_failed:
+            translate_start = time.monotonic()
             try:
                 translated_text = await translate(original_text, token)
             except Exception as exc:
                 translated_text = f"[Translation error: {str(exc)}]"
+            translation_duration_ms = int((time.monotonic() - translate_start) * 1000)
 
         # Save translation
         translation = Translation(
             file_id=uploaded.id,
             original_text=original_text,
             translated_text=translated_text,
+            ocr_duration_ms=ocr_duration_ms,
+            translation_duration_ms=translation_duration_ms,
         )
         db.add(translation)
 
@@ -115,6 +123,8 @@ async def upload_report(
             "translation": {
                 "original_text": original_text,
                 "translated_text": translated_text,
+                "ocr_duration_ms": ocr_duration_ms,
+                "translation_duration_ms": translation_duration_ms,
             },
         })
 
@@ -185,6 +195,8 @@ def get_report_record(
                         "id": t.id,
                         "original_text": t.original_text,
                         "translated_text": t.translated_text,
+                        "ocr_duration_ms": t.ocr_duration_ms,
+                        "translation_duration_ms": t.translation_duration_ms,
                         "created_at": t.created_at.isoformat(),
                     }
                     for t in f.translations

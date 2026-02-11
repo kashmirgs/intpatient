@@ -25,6 +25,8 @@ class TestReportUpload:
         assert "translation" in file_data
         assert file_data["translation"]["original_text"] == "Extracted text from image"
         assert file_data["translation"]["translated_text"] == "Translated text content"
+        assert file_data["translation"]["ocr_duration_ms"] >= 0
+        assert file_data["translation"]["translation_duration_ms"] >= 0
 
         mock_ocr.assert_called_once()
         mock_uppermind_translate.assert_called_once()
@@ -115,6 +117,9 @@ class TestReportRecords:
         assert len(data["files"]) == 1
         assert "translations" in data["files"][0]
         assert len(data["files"][0]["translations"]) == 1
+        t = data["files"][0]["translations"][0]
+        assert t["ocr_duration_ms"] >= 0
+        assert t["translation_duration_ms"] >= 0
 
     def test_get_record_not_found(self, client):
         """Test getting a non-existent record returns 404."""

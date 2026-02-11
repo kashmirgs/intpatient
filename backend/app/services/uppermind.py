@@ -52,7 +52,13 @@ async def translate(text: str, token: str) -> str:
 
         # Handle different possible response formats
         if isinstance(data, str):
-            return data
-        if isinstance(data, dict):
-            return data.get("response") or data.get("content") or data.get("text", "")
-        return str(data)
+            raw = data
+        elif isinstance(data, dict):
+            raw = data.get("ai_message") or data.get("response") or data.get("content") or data.get("text", "")
+        else:
+            raw = str(data)
+
+        # Extract text after "assistantfinal" marker if present
+        if "assistantfinal" in raw:
+            raw = raw.split("assistantfinal", 1)[1]
+        return raw.strip()
