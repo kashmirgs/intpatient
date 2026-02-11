@@ -17,8 +17,7 @@ async def extract_text_from_image(image_bytes: bytes) -> str:
             f"{settings.OLLAMA_URL}/api/generate",
             json={
                 "model": settings.OLLAMA_MODEL,
-                #"prompt": "Extract all text from this image exactly as written. Output ONLY the text content from the image. Do not add any instructions, preambles, or commentary.",
-                "prompt": "OCR",
+                "prompt": "Extract all text from this image exactly as written. Output ONLY the text content from the image. Do not add any instructions, preambles, or commentary.",
                 "images": [b64_image],
                 "stream": False,
             },
