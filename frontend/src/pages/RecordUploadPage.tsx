@@ -170,32 +170,57 @@ export default function RecordUploadPage() {
                   <h3 style={styles.sectionTitle}>Raporlar</h3>
                   {reportResult.success && reportResult.files ? (
                     <div>
-                      <div style={styles.successRow}>
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2">
-                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                          <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
-                        <span style={styles.successText}>
-                          Raporlar başarıyla işlendi.
-                        </span>
-                      </div>
-                      {reportResult.files.map((file, index) => (
-                        <div key={index} style={{ marginTop: '16px' }}>
-                          <h4 style={styles.fileName}>{file.original_filename}</h4>
-                          {file.translation.original_text && (
-                            <div className="card" style={{ marginBottom: '12px' }}>
-                              <h4 style={styles.resultTitle}>Orijinal Metin (OCR)</h4>
-                              <pre style={styles.resultText}>{file.translation.original_text}</pre>
-                            </div>
-                          )}
-                          {file.translation.translated_text && (
-                            <div className="card">
-                              <h4 style={styles.resultTitleAccent}>Türkçe Çeviri</h4>
-                              <pre style={styles.resultText}>{file.translation.translated_text}</pre>
-                            </div>
-                          )}
+                      {reportResult.files.every((f) =>
+                        !f.translation.original_text.startsWith('[OCR error:') &&
+                        !f.translation.translated_text.startsWith('[Translation error:')
+                      ) ? (
+                        <div style={styles.successRow}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4caf50" strokeWidth="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                          </svg>
+                          <span style={styles.successText}>
+                            Raporlar başarıyla işlendi.
+                          </span>
                         </div>
-                      ))}
+                      ) : (
+                        <div style={styles.warning}>
+                          Bazı dosyalarda işlem hatası oluştu.
+                        </div>
+                      )}
+                      {reportResult.files.map((file, index) => {
+                        const ocrFailed = file.translation.original_text.startsWith('[OCR error:')
+                        const translationFailed = file.translation.translated_text.startsWith('[Translation error:')
+                        return (
+                          <div key={index} style={{ marginTop: '16px' }}>
+                            <h4 style={styles.fileName}>{file.original_filename}</h4>
+                            {ocrFailed ? (
+                              <div style={styles.error}>
+                                OCR hatası: Metin çıkarılamadı. Lütfen dosyayı kontrol edip tekrar deneyin.
+                              </div>
+                            ) : (
+                              <>
+                                {file.translation.original_text && (
+                                  <div className="card" style={{ marginBottom: '12px' }}>
+                                    <h4 style={styles.resultTitle}>Orijinal Metin (OCR)</h4>
+                                    <pre style={styles.resultText}>{file.translation.original_text}</pre>
+                                  </div>
+                                )}
+                                {translationFailed ? (
+                                  <div style={styles.error}>
+                                    Çeviri hatası: Çeviri yapılamadı.
+                                  </div>
+                                ) : file.translation.translated_text && (
+                                  <div className="card">
+                                    <h4 style={styles.resultTitleAccent}>Türkçe Çeviri</h4>
+                                    <pre style={styles.resultText}>{file.translation.translated_text}</pre>
+                                  </div>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        )
+                      })}
                     </div>
                   ) : reportResult.error ? (
                     <div style={styles.error}>{reportResult.error}</div>
@@ -406,6 +431,14 @@ const styles: { [key: string]: React.CSSProperties } = {
     padding: '10px 14px',
     background: 'rgba(244, 67, 54, 0.08)',
     color: '#f44336',
+    borderRadius: '8px',
+    fontSize: '13px',
+    fontWeight: 500,
+  },
+  warning: {
+    padding: '10px 14px',
+    background: 'rgba(255, 152, 0, 0.08)',
+    color: '#e65100',
     borderRadius: '8px',
     fontSize: '13px',
     fontWeight: 500,
