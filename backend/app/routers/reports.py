@@ -93,6 +93,13 @@ async def upload_report(
 
     db.commit()
 
+    # Capture record attributes before stream (session may close)
+    record_id = record.id
+    record_type = record.record_type
+    record_patient_note = record.patient_note
+    record_created_at = record.created_at.isoformat()
+    record_created_by = record.created_by
+
     async def _process_stream():
         total = len(file_items)
         ocr_results = [None] * total
@@ -162,7 +169,7 @@ async def upload_report(
             })
         db.commit()
 
-        yield f"data: {json.dumps({'phase': 'complete', 'result': {'id': record.id, 'record_type': record.record_type, 'patient_note': record.patient_note, 'created_at': record.created_at.isoformat(), 'created_by': record.created_by, 'files': result_files}})}\n\n"
+        yield f"data: {json.dumps({'phase': 'complete', 'result': {'id': record_id, 'record_type': record_type, 'patient_note': record_patient_note, 'created_at': record_created_at, 'created_by': record_created_by, 'files': result_files}})}\n\n"
 
     return StreamingResponse(_process_stream(), media_type="text/event-stream")
 
