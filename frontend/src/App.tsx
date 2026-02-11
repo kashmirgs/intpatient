@@ -3,8 +3,7 @@ import { AuthProvider } from './hooks/AuthProvider'
 import ProtectedRoute from './components/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
-import RadiologyUploadPage from './pages/RadiologyUploadPage'
-import ReportUploadPage from './pages/ReportUploadPage'
+import RecordUploadPage from './pages/RecordUploadPage'
 import RecordsPage from './pages/RecordsPage'
 
 export default function App() {
@@ -21,18 +20,10 @@ export default function App() {
           }
         />
         <Route
-          path="/radiology/upload"
+          path="/upload"
           element={
             <ProtectedRoute>
-              <RadiologyUploadPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/reports/upload"
-          element={
-            <ProtectedRoute>
-              <ReportUploadPage />
+              <RecordUploadPage />
             </ProtectedRoute>
           }
         />
