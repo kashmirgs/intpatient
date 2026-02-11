@@ -79,16 +79,21 @@ async def upload_report(
         db.flush()
 
         # Extract text
-        if ext in ("jpg", "jpeg", "png"):
-            original_text = await extract_text_from_image(content)
-        elif ext == "pdf":
-            original_text = await extract_from_pdf(content)
-        else:
-            original_text = ""
+        ocr_failed = False
+        try:
+            if ext in ("jpg", "jpeg", "png"):
+                original_text = await extract_text_from_image(content)
+            elif ext == "pdf":
+                original_text = await extract_from_pdf(content)
+            else:
+                original_text = ""
+        except Exception as exc:
+            original_text = f"[OCR error: {str(exc)}]"
+            ocr_failed = True
 
         # Translate via UpperMind
         translated_text = ""
-        if original_text.strip():
+        if original_text.strip() and not ocr_failed:
             try:
                 translated_text = await translate(original_text, token)
             except Exception as exc:

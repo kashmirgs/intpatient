@@ -65,8 +65,8 @@ class TestUpperMindService:
     async def test_translate_success_response_field(self):
         """Test translation with response field in result."""
         mock_response = MagicMock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {"response": "Translated text"}
-        mock_response.raise_for_status = MagicMock()
 
         with patch("httpx.AsyncClient") as MockClient:
             mock_client_instance = AsyncMock()
@@ -84,8 +84,8 @@ class TestUpperMindService:
     async def test_translate_success_content_field(self):
         """Test translation with content field in result."""
         mock_response = MagicMock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {"content": "Translated text via content"}
-        mock_response.raise_for_status = MagicMock()
 
         with patch("httpx.AsyncClient") as MockClient:
             mock_client_instance = AsyncMock()
@@ -105,8 +105,8 @@ class TestOCRService:
     async def test_extract_text_from_image(self):
         """Test OCR text extraction from image bytes."""
         mock_response = MagicMock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {"response": "Hello World"}
-        mock_response.raise_for_status = MagicMock()
 
         with patch("httpx.AsyncClient") as MockClient:
             mock_client_instance = AsyncMock()
@@ -124,8 +124,8 @@ class TestOCRService:
     async def test_extract_text_empty_response(self):
         """Test OCR with empty response."""
         mock_response = MagicMock()
+        mock_response.status_code = 200
         mock_response.json.return_value = {"response": ""}
-        mock_response.raise_for_status = MagicMock()
 
         with patch("httpx.AsyncClient") as MockClient:
             mock_client_instance = AsyncMock()

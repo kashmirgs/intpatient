@@ -1,6 +1,10 @@
+import logging
+
 import httpx
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 async def authenticate(username: str, password: str) -> dict:
@@ -40,7 +44,10 @@ async def translate(text: str, token: str) -> str:
                 "Content-Type": "application/json",
             },
         )
-        response.raise_for_status()
+        if response.status_code != 200:
+            error_detail = response.text
+            logger.error("UpperMind translate error (HTTP %s): %s", response.status_code, error_detail)
+            raise RuntimeError(f"Translation failed (HTTP {response.status_code}): {error_detail}")
         data = response.json()
 
         # Handle different possible response formats

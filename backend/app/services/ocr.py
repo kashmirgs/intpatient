@@ -1,8 +1,11 @@
 import base64
+import logging
 
 import httpx
 
 from app.config import settings
+
+logger = logging.getLogger(__name__)
 
 
 async def extract_text_from_image(image_bytes: bytes) -> str:
@@ -20,6 +23,9 @@ async def extract_text_from_image(image_bytes: bytes) -> str:
             },
             headers={"Content-Type": "application/json"},
         )
-        response.raise_for_status()
+        if response.status_code != 200:
+            error_detail = response.text
+            logger.error("Ollama OCR error (HTTP %s): %s", response.status_code, error_detail)
+            raise RuntimeError(f"Ollama OCR failed (HTTP {response.status_code}): {error_detail}")
         data = response.json()
         return data.get("response", "")
